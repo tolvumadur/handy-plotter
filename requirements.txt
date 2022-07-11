@@ -2,4 +2,4 @@ matplotlib
 numpy
 plot-likert
 pandas
-PIL
+pillow
