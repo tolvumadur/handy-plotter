@@ -1,9 +1,10 @@
 name: CI Testing
 
-on: [push]
+on: push
 
 jobs:
-  testit:
+  test_job:
+    name: Run Unit Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
