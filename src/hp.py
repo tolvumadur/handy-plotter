@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import sys, os, json
+from PIL import Image
 
 class HandyPlotter:
 
@@ -64,4 +65,11 @@ class HandyPlotter:
 
 
     def _write_plot_to_file(self, p, fn):
-        plt.savefig(fn, bbox_inches='tight')
+        plt.savefig(fn, bbox_inches='tight', metadata={})
+        
+        # Remove references to matplotlib, etc in image file
+        if fn[-4:] in [".png", ".jpg"]:
+            image = Image.open(fn)
+            image_clean = Image.new(image.mode, image.size)
+            image_clean.putdata(list(image.getdata()))
+            image_clean.save(fn)

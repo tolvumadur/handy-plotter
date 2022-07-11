@@ -7,8 +7,6 @@ HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(HERE,'..','src'))
 from hp import HandyPlotter
 
-
-
 class TestLikert(unittest.TestCase):
     def setUp(self):
         with open(os.path.join(HERE, "static", "test_data.json"))as f:
@@ -33,7 +31,9 @@ class TestLikert(unittest.TestCase):
 
     def tearDown(self):
         try:
-            os.remove(os.path.join(HERE, "likert_test_instance.png"))
+            #os.remove(os.path.join(HERE, "likert_test_instance.png"))
+            pass
+        
         except:
             pass
         return super().tearDown()
