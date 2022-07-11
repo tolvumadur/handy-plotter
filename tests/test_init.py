@@ -13,14 +13,14 @@ class TestInit(unittest.TestCase):
         self.assertFalse(hasattr(a, "config"))
     
     def test_config_init(self):
-        a = HandyPlotter(os.path.join(HERE, "test_config.json"))
+        a = HandyPlotter(os.path.join(HERE, "static", "test_config.json"))
         self.assertIsNotNone(a)
         self.assertTrue(hasattr(a, "config"))
         self.assertRaises(Exception, HandyPlotter, *["NoSuchPathExists"])
 
     def test_bad_init(self):
         self.assertRaises(Exception, HandyPlotter, *["a", "b", 2])
-        self.assertRaises(Exception, HandyPlotter, *[os.path.join(HERE, "test_config.json"), None])
+        self.assertRaises(Exception, HandyPlotter, *[os.path.join(HERE, "static", "test_config.json"), None])
 
 
 if __name__ == '__main__':

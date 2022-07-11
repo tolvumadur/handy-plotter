@@ -1,0 +1,18 @@
+{
+    "likert_test_data" : {
+        "questions" : ["I am an elderberry", "I am not an elderberry.", "I am an elderberry advocate."],
+        "data" : [
+            ["Agree", "agree", "disagree"],
+            ["Strongly Agree", "Neutral", "StronGLY DISAGREE"],
+            ["Agree", "strongly Disagree", "agree"],
+            ["Strongly Disagree", "Disagree", "Neutral"]
+        ],
+        "scale" : [
+            "Strongly Disagree",
+            "Disagree",
+            "Neutral",
+            "Agree",
+            "Strongly Agree"
+        ]
+    }
+}
