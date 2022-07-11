@@ -1,20 +1,23 @@
 name: CI Testing
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  test_job:
-    name: Run Unit Tests
+  build:
+#    name: Run Unit Tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
+#    strategy:
+#      matrix:
+#        python-version: 3.8 #[3.6, 3.7, 3.8]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python all python version
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8 #${{ matrix.python-version }}
           architecture: x64
      - name: Install dependencies
        run: pip install -r requirements.txt 
