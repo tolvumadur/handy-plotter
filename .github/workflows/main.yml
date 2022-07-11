@@ -7,17 +7,13 @@ on:
 
 jobs:
   build:
-#    name: Run Unit Tests
     runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        python-version: 3.8 #[3.6, 3.7, 3.8]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python all python version
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8 #${{ matrix.python-version }}
+          python-version: 3.8
           architecture: x64
      - name: Install dependencies
        run: pip install -r requirements.txt 
