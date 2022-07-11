@@ -16,7 +16,7 @@ class TestLikert(unittest.TestCase):
         a = HandyPlotter(os.path.join(HERE, "static", "test_config.json"))
 
         a.plot_likert_scales(
-            self.config["likert_test_data"]["questions"], 
+            #self.config["likert_test_data"]["questions"], 
             self.config["likert_test_data"]["data"], 
             self.config["likert_test_data"]["scale"],
             os.path.join(HERE, "likert_test_instance.png")

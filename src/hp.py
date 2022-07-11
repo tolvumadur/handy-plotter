@@ -20,39 +20,41 @@ class HandyPlotter:
             raise Exception(f"Failed to initialize a HandyPlotter object. Expected 0-1 arguments, got {len(args)}")
 
 
-    def plot_likert_scales(self, question_text, rows, scale, outfile):
+    def plot_likert_scales(self, rows, scale, outfile, row_labels=None):
         import plot_likert
         # Uses Nathan Malkin's plot-likert library to plot likert scales
 
         assert len(rows) > 0, "can't plot nothingness"
-        assert type(question_text) is list
         assert type(rows) is list
         assert type(rows[0]) is list
         assert type(rows[0][0]) is str
 
-        num_questions = len(question_text)
+        num_questions = len(rows[0])
         num_answers = len(rows)
 
         # Standardize capitalization to match scale
-        for i in range(len(rows)):
+        for i in range(num_answers):
+
+            # Also make sure that every data row is the same length
             assert len(rows[i]) == num_questions
 
-            for j in range(len(rows[0])):
+            for j in range(num_questions):
+
+                # Fix capitalization differences from the displayed scale
                 if rows[i][j] not in scale:
                     for k in scale:
                         if rows[i][j].lower() == k.lower():
                             rows[i][j] = k
                             break
 
-
-        row_labels = ("Q" + str(i+1) for i in range(len(question_text)))
+        if row_labels == None:
+            row_labels = ("Q" + str(i+1) for i in range(num_questions))
 
         df = pd.DataFrame(
             rows, 
             columns=row_labels
         )
 
-        #print(df)
 
         # Expects questions as column names, and answers as cells
         self._write_plot_to_file(
