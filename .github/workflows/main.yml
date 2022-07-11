@@ -3,7 +3,7 @@ name: CI Testing
 on: [push]
 
 jobs:
-  build:
+  testit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
