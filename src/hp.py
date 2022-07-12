@@ -20,7 +20,7 @@ class HandyPlotter:
             raise Exception(f"Failed to initialize a HandyPlotter object. Expected 0-1 arguments, got {len(args)}")
 
 
-    def plot_likert_scales(self, rows, scale, outfile, row_labels=None):
+    def plot_likert_scales(self, rows, scale, outfile, row_labels=None, title=None):
         import plot_likert
         # Uses Nathan Malkin's plot-likert library to plot likert scales
 
@@ -42,9 +42,13 @@ class HandyPlotter:
 
                 # Fix capitalization differences from the displayed scale
                 if rows[i][j] not in scale:
-                    for k in scale:
-                        if rows[i][j].lower() == k.lower():
-                            rows[i][j] = k
+                    for k in range(len(scale)):
+                        if type(rows[i][j]) is not str:
+                            rows[i][j] = str(rows[i][j])
+                        if type(scale[k]) is not str:
+                            scale[k] = str(scale[k])
+                        if rows[i][j].lower() == scale[k].lower():
+                            rows[i][j] = scale[k]
                             break
 
         if row_labels == None:
@@ -55,18 +59,71 @@ class HandyPlotter:
             columns=row_labels
         )
 
+        plot_likert.plot_likert(
+                df, 
+                plot_scale=scale
+            )
+
+        if title is not None:
+            plt.title(title)
 
         # Expects questions as column names, and answers as cells
         self._write_plot_to_file(
-            plot_likert.plot_likert(
-                df, 
-                plot_scale=scale
-            ),    
             outfile
         )
+    
+    
+    # cat_name -> {opt1 -> cnt1, opt2 -> ...}
+    def plot_categorical_breakdown_latex_table(self, data, title, category_override = None):
+        
+        categories = list(data.keys())
+
+        headers = "\\textbf{" + "} & \\testbf{".join(["category        ", "count", "percent"]) + "} \\\\"
+
+        tabular_rows = []
+        total = sum(list(data[categories[0]].values()))
+
+        i = 0
+        for category, options in data.items():
+            
+            tabular_row = " "*12 + f"\\textbf{{{category:20}}}" + " "*34
+            if category_override is not None:
+                tabular_row = " "*12 + f"\\textbf{{{category_override[i] + '}':40}"  + " "*14
+
+            tabular_rows.append(tabular_row)
+            i += 1
+
+            # Sort the options  
+            # The hope is 50% of the time this is the sort you want :)
+            option_names = sorted(list(set(options.keys())), key = lambda a: int(a) if a.isdigit() else -1*options[a])
+
+            
+            for option in option_names:
+                cnt = options[option]
+                tabular_rows.append(" "*12 + f"{option:25} & {cnt:14} & {round(cnt/total * 100,2):14}\\% ")
+                
+
+        body = "\\\\\n".join(tabular_rows)
+
+        return \
+f"""
+\\begin{{table}}
+    \\begin{{center}}
+        \\begin{{tabular}}{{|l|c|c|}}
+            {headers}
+            \\midrule
+{body}\\\\
+        \\end{{tabular}}
+        \\caption{{\\textbf{{{title}}}--\\\\
+        }}
+        \\label{{table:{title.replace(" ", "-").lower()}}}
+    \\end{{center}}
+\\end{{table}}
+"""
 
 
-    def _write_plot_to_file(self, p, fn):
+
+    def _write_plot_to_file(self, fn):
         plt.savefig(fn, bbox_inches='tight', metadata={})
         
         # Remove references to matplotlib, etc in image file
